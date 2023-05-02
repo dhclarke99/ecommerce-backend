@@ -38,19 +38,10 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', (req, res) => {
   // create a new category
-  /* req.body should look like this...
-    {
-      product_name: "Basketball",
-      price: 200.00,
-      stock: 3,
-      tagIds: [1, 2, 3, 4]
-    }
-  */
+ 
     Category.create(req.body)
     .then((category) => {
-      // if there's product tags, we need to create pairings to bulk create in the ProductTag model
-      
-      // if no product tags, just respond
+     
       res.status(200).json(category);
     })
   
@@ -60,8 +51,22 @@ router.post('/', (req, res) => {
     });
 });
 
-router.put('/:id', (req, res) => {
+router.put('/:id', async (req, res) => {
   // update a category by its `id` value
+  try {
+    const categoryData = await Category.update(req.body, {
+      where: {
+        id: req.params.id,
+      },
+    });
+    if (!categoryData[0]) {
+      res.status(404).json({ message: 'No category with this id!' });
+      return;
+    }
+    res.status(200).json(categoryData);
+  } catch (err) {
+    res.status(500).json(err);
+  }
 });
 
 router.delete('/:id', async (req, res) => {
