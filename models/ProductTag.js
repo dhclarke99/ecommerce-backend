@@ -1,6 +1,7 @@
 const { Model, DataTypes } = require('sequelize');
 
 const sequelize = require('../config/connection');
+// const { DELETE } = require('sequelize/types/lib/query-types');
 
 class ProductTag extends Model {}
 
@@ -18,6 +19,7 @@ ProductTag.init(
       references: {
         model: 'product',
         key: 'id',
+        onDelete: 'CASCADE',
       },
     },
     tag_id: {
@@ -25,6 +27,7 @@ ProductTag.init(
       references: {
         model: 'tag',
         key: 'id',
+        onDelete: 'CASCADE',
       },
     },
 
